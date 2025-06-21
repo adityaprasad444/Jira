@@ -1,0 +1,149 @@
+body {
+  background: #f7f9fb;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 32px 40px 40px 40px;
+}
+
+h1 {
+  text-align: center;
+  color: #2d3a4a;
+  margin-bottom: 32px;
+}
+
+.email-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.email-form label {
+  font-weight: 500;
+  color: #2d3a4a;
+}
+
+.email-form input[type="email"] {
+  padding: 8px 12px;
+  border: 1px solid #bfc9d1;
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.email-form input[type="email"]:focus {
+  border: 1.5px solid #4a90e2;
+}
+
+.email-form button {
+  background: #4a90e2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.email-form button:disabled {
+  background: #bfc9d1;
+  cursor: not-allowed;
+}
+
+.email-form button:not(:disabled):hover {
+  background: #357abd;
+}
+
+.error {
+  color: #d8000c;
+  background: #ffd2d2;
+  border: 1px solid #d8000c;
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 0 auto 24px auto;
+  max-width: 400px;
+  text-align: center;
+}
+
+.grouped-logs {
+  margin-top: 32px;
+}
+
+.log-group {
+  margin-bottom: 36px;
+  background: #f3f6fa;
+  border-radius: 8px;
+  padding: 18px 18px 10px 18px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.log-group h2 {
+  color: #357abd;
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+}
+
+.logs-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.logs-table th, .logs-table td {
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.logs-table th {
+  background: #eaf1fb;
+  color: #2d3a4a;
+  font-weight: 600;
+  border-bottom: 2px solid #dbe6f3;
+}
+
+.logs-table tr {
+  transition: background 0.15s;
+}
+
+.logs-table tr:hover {
+  background: #f5faff;
+}
+
+.logs-table td {
+  border-bottom: 1px solid #f0f4f8;
+  color: #3a4a5d;
+  font-size: 0.98rem;
+}
+
+.logs-table tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 700px) {
+  .App {
+    padding: 16px 4vw 24px 4vw;
+  }
+  .logs-table th, .logs-table td {
+    padding: 7px 4px;
+    font-size: 0.93rem;
+  }
+  .log-group {
+    padding: 10px 4px 6px 4px;
+  }
+}
