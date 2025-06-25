@@ -25,23 +25,28 @@ function secondsToHMS(seconds) {
 }
 
 function groupLogsByDate(logs) {
+  console.log('Raw logs:', logs);
   const grouped = {};
   logs.forEach(log => {
-    // Always use only the date part (YYYY-MM-DD)
-    let date = 'Unknown';
-    if (log.date) {
-      date = log.date.slice(0, 10);
-    }
+    // Normalize date to YYYY-MM-DD in UTC, skip if invalid
+    if (!log.date || isNaN(new Date(log.date))) return;
+    const date = new Date(log.date).toISOString().slice(0, 10);
     if (!grouped[date]) grouped[date] = { date, total_time_spent_seconds: 0, logs: [] };
     const seconds = parseTimeSpent(log.time_spent);
     grouped[date].total_time_spent_seconds += seconds;
     grouped[date].logs.push(log);
   });
-  return Object.values(grouped).map(group => ({
+  // Sort logs within each group by date (most recent first)
+  Object.values(grouped).forEach(group => {
+    group.logs.sort((a, b) => new Date(b.date) - new Date(a.date));
+  });
+  const sortedGroups = Object.values(grouped).map(group => ({
     date: group.date, // This will be only YYYY-MM-DD
     total_time_spent: secondsToHMS(group.total_time_spent_seconds),
     logs: group.logs
-  })).sort((a, b) => b.date.localeCompare(a.date));
+  })).sort((a, b) => Number(b.date.replace(/-/g, '')) - Number(a.date.replace(/-/g, ''))); // Sort groups by date (descending)
+  console.log('Sorted date groups:', sortedGroups.map(g => g.date));
+  return sortedGroups;
 }
 
 function App() {
@@ -69,8 +74,10 @@ function App() {
       if (!response.ok) {
         setError(data.error || 'Failed to fetch logs');
       } else if (Array.isArray(data.grouped_logs)) {
+        // Use backend's grouped and sorted logs as-is
         setGroupedLogs(data.grouped_logs);
       } else if (Array.isArray(data.logs)) {
+        // Only group and sort if backend sends raw logs
         const grouped = groupLogsByDate(data.logs);
         setGroupedLogs(grouped);
       } else {

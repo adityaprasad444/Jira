@@ -7,6 +7,7 @@ const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const timeLogsRouter = require('./routes/timeLogs');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(cookieParser());
 // API routes
 app.use('/api', indexRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/time-logs', timeLogsRouter);
 
 // Serve static files from the React build directory
 if (process.env.NODE_ENV === 'production') {
