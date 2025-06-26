@@ -12,7 +12,8 @@
     "install-client": "cd client && npm install",
     "install-server": "npm install",
     "install-all": "npm run install-server && npm run install-client",
-    "heroku-postbuild": "npm run install-client && npm run build"
+    "heroku-postbuild": "npm run install-client && npm run build",
+    "postinstall": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -21,7 +22,8 @@
     "dotenv": "^16.5.0",
     "express": "~4.16.1",
     "jira-client": "^8.2.2",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "react-scripts": "^5.0.1"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

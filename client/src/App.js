@@ -25,7 +25,7 @@ function secondsToHMS(seconds) {
 }
 
 function groupLogsByDate(logs) {
-  console.log('Raw logs:', logs);
+  //console.log('Raw logs:', logs);
   const grouped = {};
   logs.forEach(log => {
     // Normalize date to YYYY-MM-DD in UTC, skip if invalid
@@ -45,7 +45,7 @@ function groupLogsByDate(logs) {
     total_time_spent: secondsToHMS(group.total_time_spent_seconds),
     logs: group.logs
   })).sort((a, b) => Number(b.date.replace(/-/g, '')) - Number(a.date.replace(/-/g, ''))); // Sort groups by date (descending)
-  console.log('Sorted date groups:', sortedGroups.map(g => g.date));
+  //console.log('Sorted date groups:', sortedGroups.map(g => g.date));
   return sortedGroups;
 }
 

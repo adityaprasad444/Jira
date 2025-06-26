@@ -55,9 +55,9 @@ router.post('/api/time-logs', async (req, res) => {
     }
 
     const jql = `worklogAuthor = "${accountId}" AND worklogDate >= "${jqlStartDate}" AND worklogDate <= "${jqlEndDate}"`;
-    console.log(`[JIRA API] About to search issues with JQL: ${jql}`);
+    //console.log(`[JIRA API] About to search issues with JQL: ${jql}`);
     const issues = await jira.searchJira(jql, { maxResults: 100 });
-    console.log(`[JIRA API] Received ${issues.issues.length} issues for accountId: ${accountId}`);
+    //console.log(`[JIRA API] Received ${issues.issues.length} issues for accountId: ${accountId}`);
     const logs = [];
     for (const issue of issues.issues) {
       const worklogs = await jira.getIssueWorklogs(issue.key);
