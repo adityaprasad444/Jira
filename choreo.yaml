@@ -7,7 +7,7 @@ spec:
   type: web
   runtime: nodejs
   build:
-    context: .
+    context: client/
     dockerfile: Dockerfile
   resources:
     memory: 512Mi
