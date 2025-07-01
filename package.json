@@ -12,8 +12,7 @@
     "install-client": "cd client && npm install",
     "install-server": "npm install",
     "install-all": "npm run install-server && npm run install-client",
-    "heroku-postbuild": "npm run install-client && npm run build",
-    "postinstall": "concurrently \"npm run server\" \"npm run client\""
+    "heroku-postbuild": "npm run install-client && npm run build"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
