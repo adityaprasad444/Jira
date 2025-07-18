@@ -21,6 +21,8 @@ const jira = new JiraClient({
 
 // POST /api/time-logs
 router.post('/', async (req, res) => {
+  console.log('==== API HIT: /api/time-logs ====');
+  console.log('POST /api/time-logs called');
   console.log('Received POST /api/time-logs with body:', req.body);
   console.log('JIRA_HOST:', process.env.JIRA_HOST);
   console.log('JIRA_EMAIL:', process.env.JIRA_EMAIL);
@@ -61,11 +63,11 @@ router.post('/', async (req, res) => {
       accountId = users[0].accountId;
       console.log('Found accountId:', accountId);
     } catch (err) {
-      //console.error(`[JIRA API ERROR] Failed to get user by email: ${err.message}`);
-      //console.error('Full error object:', err);
-      //console.error('Error response:', err.response?.data);
-      //console.error('Error status:', err.response?.status);
-      //console.error('Error code:', err.code);
+      console.error(`[JIRA API ERROR] Failed to get user by email: ${err.message}`);
+      console.error('Full error object:', err);
+      console.error('Error response:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      console.error('Error code:', err.code);
       console.error('Error name:', err.name);
       return res.status(500).json({ error: 'Failed to get Jira user by email', details: err.message });
     }
@@ -90,21 +92,21 @@ router.post('/', async (req, res) => {
         }
       }
     }
-    //console.log('Built logs array, length:', logs.length);
-    //console.log('Sample logs:', logs.slice(0, 3));
-    //console.log('About to group logs, logs array length:', logs.length);
+    console.log('Built logs array, length:', logs.length);
+    console.log('Sample logs:', logs.slice(0, 3));
+    console.log('About to group logs, logs array length:', logs.length);
     const grouped = {};
     logs.forEach(log => {
       // Normalize date to YYYY-MM-DD in UTC
       const dateKey = log.date ? new Date(log.date).toISOString().slice(0, 10) : 'Unknown';
-      //console.log('Grouping log with dateKey:', `[${dateKey}]`);
+      console.log('Grouping log with dateKey:', `[${dateKey}]`);
       if (!grouped[dateKey]) {
         grouped[dateKey] = { date: dateKey, total_time_spent_seconds: 0, logs: [] };
       }
       grouped[dateKey].total_time_spent_seconds += log.time_spent_seconds;
       grouped[dateKey].logs.push(log);
     });
-    //console.log('Final grouped keys:', Object.keys(grouped));
+    console.log('Final grouped keys:', Object.keys(grouped));
     // Convert to array and add formatted total time
     const result = Object.values(grouped).map(group => ({
       date: group.date,
@@ -112,9 +114,9 @@ router.post('/', async (req, res) => {
       total_time_spent: secondsToHMS(group.total_time_spent_seconds),
       logs: group.logs
     }));
-    //console.log('Before sort:', result.map(g => g.date));
-    result.sort((a, b) => new Date(b.date) - new Date(a.date));
-    //console.log('After sort:', result.map(g => g.date));
+    console.log('Before sort:', result.map(g => g.date));
+    result.sort((a, b) => new Date(a.date) - new Date(b.date));
+    console.log('After sort:', result.map(g => g.date));
     res.json({ grouped_logs: result });
   } catch (err) {
     console.error(`[JIRA API ERROR] ${err.message}`);

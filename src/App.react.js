@@ -25,10 +25,8 @@ function secondsToHMS(seconds) {
 }
 
 function groupLogsByDate(logs) {
-  //console.log('Raw logs:', logs);
   const grouped = {};
   logs.forEach(log => {
-    // Normalize date to YYYY-MM-DD in UTC, skip if invalid
     if (!log.date || isNaN(new Date(log.date))) return;
     const date = new Date(log.date).toISOString().slice(0, 10);
     if (!grouped[date]) grouped[date] = { date, total_time_spent_seconds: 0, logs: [] };
@@ -36,16 +34,14 @@ function groupLogsByDate(logs) {
     grouped[date].total_time_spent_seconds += seconds;
     grouped[date].logs.push(log);
   });
-  // Sort logs within each group by date (most recent first)
   Object.values(grouped).forEach(group => {
     group.logs.sort((a, b) => new Date(b.date) - new Date(a.date));
   });
   const sortedGroups = Object.values(grouped).map(group => ({
-    date: group.date, // This will be only YYYY-MM-DD
+    date: group.date,
     total_time_spent: secondsToHMS(group.total_time_spent_seconds),
     logs: group.logs
-  })).sort((a, b) => Number(b.date.replace(/-/g, '')) - Number(a.date.replace(/-/g, ''))); // Sort groups by date (descending)
-  //console.log('Sorted date groups:', sortedGroups.map(g => g.date));
+  })).sort((a, b) => new Date(a.date) - new Date(b.date));
   return sortedGroups;
 }
 
@@ -64,7 +60,6 @@ function App() {
     setError('');
     setGroupedLogs([]);
     try {
-      // Use relative URL for API calls - works in both development and production
       const response = await fetch('/api/time-logs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -74,10 +69,10 @@ function App() {
       if (!response.ok) {
         setError(data.error || 'Failed to fetch logs');
       } else if (Array.isArray(data.grouped_logs)) {
-        // Use backend's grouped and sorted logs as-is
-        setGroupedLogs(data.grouped_logs);
+        // Always sort grouped_logs by date (oldest to newest)
+        const sorted = [...data.grouped_logs].sort((a, b) => new Date(a.date) - new Date(b.date));
+        setGroupedLogs(sorted);
       } else if (Array.isArray(data.logs)) {
-        // Only group and sort if backend sends raw logs
         const grouped = groupLogsByDate(data.logs);
         setGroupedLogs(grouped);
       } else {
@@ -183,4 +178,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; 
